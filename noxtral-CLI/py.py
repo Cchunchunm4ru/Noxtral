@@ -44,7 +44,7 @@ def main():
             
             # Process chunk when we have enough audio data
             if len(chunk_buffer) >= chunk_size:
-                print(f"\n🔄 Processing chunk in real-time...")
+                print(f"\nProcessed chunk in real-time...")
                 result = stt.transcribe_chunk(chunk_buffer)
                 chunk_buffer = b""  # Reset buffer for next chunk
         
