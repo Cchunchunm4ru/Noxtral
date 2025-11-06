@@ -4,13 +4,14 @@ from events.EventManager import EventManager
 
 def handle_stt_activation(transcription=None, confidence=None, audio_duration=None):
     """Handle STT activation events instantly"""
-    print(f"🎤 STT Activated! Transcription: {transcription}")
+    print(f" trasncription :{transcription}")
     if confidence:
         print(f"📊 Confidence: {confidence:.2f}")
     if audio_duration:
         print(f"⏱️  Duration: {audio_duration:.2f}s")
 
 def main():
+    #declare instance 
     fc = FrameCapture()
     stt = WhisperSTT()
     
@@ -29,8 +30,6 @@ def main():
     frame_count = 0
     capture_duration = 5  # seconds
     
-    print("🎙️ Real-time audio processing started...")
-    
     while True:
         elapsed_time = time.time() - start_time
         if elapsed_time >= capture_duration:
@@ -44,21 +43,12 @@ def main():
             
             # Process chunk when we have enough audio data
             if len(chunk_buffer) >= chunk_size:
-                print(f"\nProcessed chunk in real-time...")
                 result = stt.transcribe_chunk(chunk_buffer)
                 chunk_buffer = b""  # Reset buffer for next chunk
         
         time.sleep(0.01)  # Small delay to prevent CPU overload
     
     fc.stop()
-    
-    # Process any remaining audio data
-    if len(chunk_buffer) > 0:
-        print(f"\n🔄 Processing final chunk...")
-        result = stt.transcribe_chunk(chunk_buffer)
-    
-    print(f"\n📊 Total frames processed: {frame_count}")
-
 
 if __name__ == "__main__":
     main()

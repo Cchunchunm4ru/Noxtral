@@ -17,7 +17,6 @@ class WhisperSTT(BaseSTT):
         self.word_count = 0  # Track word count for recursive printing
     
     def save_wav(self, filename, audio_bytes, sample_rate=16000, channels=1):
-        """Save audio bytes to a WAV file"""
         with wave.open(filename, "wb") as wf:
             wf.setnchannels(channels)
             wf.setsampwidth(2)  # 16-bit audio
@@ -25,14 +24,12 @@ class WhisperSTT(BaseSTT):
             wf.writeframes(audio_bytes)
             
     def chunk_to_wav(self, audio_chunk: bytes) -> str:
-        """Convert audio chunk to a temporary WAV file and return its path"""
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
             temp_filename = temp_file.name
             self.save_wav(temp_filename, audio_chunk, self.sample_rate)
         return temp_filename
     
     def print_words_recursively(self, words_list, index=0):
-        """Recursively print words starting from the given index"""
         if index >= len(words_list):
             return
         
@@ -40,17 +37,14 @@ class WhisperSTT(BaseSTT):
         self.print_words_recursively(words_list, index + 1)
     
     def chunk_transcription_logger(self, audio_chunk: bytes) -> str:
-        """Log transcription of a single audio chunk (for debugging)"""
         result = self.transcribe_audio(audio_chunk)
         print(f"Chunk transcription: {result}")
         return result
     
     def transcribe_chunk(self, audio_chunk: bytes) -> str:
-        """Transcribe a single audio chunk - required by BaseSTT"""
         return self.transcribe_audio(audio_chunk)
     
     def transcribe_audio(self, audio_data: bytes) -> str:
-        """Transcribe raw audio data bytes"""
         wav_path = self.chunk_to_wav(audio_data)
         
         try:
@@ -83,6 +77,5 @@ class WhisperSTT(BaseSTT):
                 os.remove(wav_path)
 
     def finalize(self) -> str:
-        """Finalize transcription and print all words recursively"""
         return " ".join(self.transcribed_words)
 

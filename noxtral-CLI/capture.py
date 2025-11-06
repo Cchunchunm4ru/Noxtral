@@ -16,13 +16,10 @@ class Frames:
     def audio_callback(self, indata, frames, time, status):
         if status:
             print(f"Audio callback status: {status}")
-        
-        # Convert float32 audio data to int16 properly
-        # Clip values to [-1.0, 1.0] range and scale to int16
+            
         audio_int16 = np.clip(indata, -1.0, 1.0) * 32767
         audio_int16 = audio_int16.astype(np.int16)
-        
-        # Convert to bytes
+
         audio_bytes = audio_int16.tobytes()
         audio_q.put(audio_bytes)
 
@@ -33,7 +30,7 @@ class Frames:
             channels=self.channels,
             blocksize=self.blocksize,
             callback=self.audio_callback,
-            dtype=np.float32  # Explicitly specify dtype
+            dtype=np.float32  
         )
         self.stream.start()
         print("Frame capture started.")
