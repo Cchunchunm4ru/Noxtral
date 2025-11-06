@@ -4,6 +4,10 @@ import tempfile
 import wave
 import os
 import nltk 
+from events.EventManager import EventManager
+
+# Create a global event manager instance
+event_manager = EventManager()
 
 class WhisperSTT(BaseSTT):
     def __init__(self, model_name="base", sample_rate=16000):
@@ -60,6 +64,12 @@ class WhisperSTT(BaseSTT):
                     if word:  
                         self.transcribed_words.append(word)
                         self.word_count += 1
+                        
+                        # Trigger event instantly for each word detected
+                        event_manager.publish_stt_activates(
+                            transcription=word,
+                        )
+                        
                         if self.word_count % 2 == 0:
                             self.print_words_recursively(self.transcribed_words[-2:])
             
@@ -75,3 +85,4 @@ class WhisperSTT(BaseSTT):
     def finalize(self) -> str:
         """Finalize transcription and print all words recursively"""
         return " ".join(self.transcribed_words)
+
