@@ -21,7 +21,7 @@ import glob
 import logging
 import asyncio
 import time
-# Compatibility fix for torchaudio/speechbrain version mismatch
+
 try:
     import torchaudio
     if not hasattr(torchaudio, 'list_audio_backends'):
@@ -87,9 +87,9 @@ hop_length = 256
 min_db = -80
 max_db = -20
 RECORDINGS_REF_PATH = r"C:\Users\Admin\Desktop\noxtral\captured_audio"
-MODEL_CONFIDENCE_THRESHOLD = 0.30  
-FEATURE_SIMILARITY_THRESHOLD = 0.25
-EMBEDDING_SIMILARITY_THRESHOLD = 0.15
+MODEL_CONFIDENCE_THRESHOLD = 0.50  
+FEATURE_SIMILARITY_THRESHOLD = 0.50
+EMBEDDING_SIMILARITY_THRESHOLD = 0.50
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
