@@ -70,7 +70,8 @@ noxtral/
 
 3.**create an audio dir**
    in this format 
-   ```dir
+   ```
+      dir
        |___audio1.wav
        |___audio2.wav
    ```
@@ -264,4 +265,5 @@ If you encounter any issues or have questions:
 
 
 **Made with ❤️ by [Cchunchunm4ru](https://github.com/Cchunchunm4ru)**
+
 
