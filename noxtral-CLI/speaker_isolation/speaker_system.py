@@ -55,7 +55,6 @@ except ImportError:
 import torch.nn as nn
 import torch.nn.functional as F
 import soundfile as sf
-import webrtcvad
 import requests  # if you use HTTP for Gemini
 from collections import defaultdict  # Add this missing import
 from F_def.capture import Frames, FrameCapture,AudioFrame,AudioRawFrame
@@ -1011,7 +1010,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                     try:
                         enrollment_files = glob.glob(f"{self.ref_path.replace('/recordings', '/enrollments')}/*.wav")
                         if enrollment_files:
-                            logger.info("[SPEECHBRAIN_PIPELINE] Reloading embeddings from enrollment files")
+                            logger.info("[NOXTRAL] Reloading embeddings from enrollment files")
                             current_embeddings = {}
                             for wav_file in enrollment_files:
                                 try:
@@ -1021,9 +1020,9 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                                         embedding = get_embedding_from_waveform(waveform_ref, self.recognizer, sr=16000)
                                         if embedding is not None:
                                             current_embeddings[speaker_name] = embedding
-                                            logger.info(f"[SPEECHBRAIN_PIPELINE] Loaded enrollment embedding: {speaker_name}")
+                                            logger.info(f"[NOXTRAL] Loaded enrollment embedding: {speaker_name}")
                                 except Exception as e:
-                                    logger.error(f"[SPEECHBRAIN_PIPELINE] Failed to load enrollment {wav_file}: {e}")
+                                    logger.error(f"[NOXTRAL] Failed to load enrollment {wav_file}: {e}")
                             
                             reference_embeddings_to_use = current_embeddings if current_embeddings else self.reference_embeddings
                         else:
@@ -1031,7 +1030,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                         embedding = get_embedding_from_waveform(waveform, self.recognizer, sr=16000)
                         
                         if embedding is None:
-                            logger.error("[SPEECHBRAIN_PIPELINE] Failed to extract embedding")
+                            logger.error("[NOXTRAL] Failed to extract embedding")
                             return []
                         
                         best_match = None
@@ -1046,7 +1045,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                                 best_similarity = similarity
                                 best_match = ref_name
                         
-                        logger.info(f"[SPEECHBRAIN_PIPELINE] Single speaker match: '{best_match}' with similarity {best_similarity:.3f}")
+                        logger.info(f"[NOXTRAL] Single speaker match: '{best_match}' with similarity {best_similarity:.3f}")
 
                         recognized_segments = []
                         if best_similarity > EMBEDDING_SIMILARITY_THRESHOLD:
@@ -1056,14 +1055,14 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                                 'end_s': len(waveform) / fs,
                                 'audio': waveform
                             })
-                            logger.info(f"[SPEECHBRAIN_PIPELINE] ✅ Recognized speaker: {best_match} (threshold: {EMBEDDING_SIMILARITY_THRESHOLD})")
+                            logger.info(f"[NOXTRAL] ✅ Recognized speaker: {best_match} (threshold: {EMBEDDING_SIMILARITY_THRESHOLD})")
                         else:
-                            logger.info(f"[SPEECHBRAIN_PIPELINE] Similarity {best_similarity:.3f} below threshold {EMBEDDING_SIMILARITY_THRESHOLD}")
+                            logger.info(f"[NOXTRAL] Similarity {best_similarity:.3f} below threshold {EMBEDDING_SIMILARITY_THRESHOLD}")
                 
                         return recognized_segments
                         
                     except Exception as e:
-                        logger.error(f"[SPEECHBRAIN_PIPELINE] Recognition failed: {e}")
+                        logger.error(f"[NOXTRAL] Recognition failed: {e}")
                         return []
 
             _global_verifier = SpeechBrainVerifierWithoutDiarization(speaker_rec_model, reference_embeddings, target_speaker_id)
@@ -1096,7 +1095,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                     )
                     
                     num_speakers = len(diarization_result)
-                    logger.info(f"[SPEECHBRAIN_PIPELINE] Detected {num_speakers} speakers.")
+                    logger.info(f"[NOXTRAL] Detected {num_speakers} speakers.")
                     
                     recognized_segments = []
                     for start, end, speaker_id in diarization_result:
@@ -1122,7 +1121,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                                     best_similarity = similarity
                                     best_match = ref_name
                             
-                            logger.info(f"[SPEECHBRAIN_PIPELINE] Segment {speaker_id} match: '{best_match}' with similarity {best_similarity:.3f}")
+                            logger.info(f"[NOXTRAL] Segment {speaker_id} match: '{best_match}' with similarity {best_similarity:.3f}")
 
                             if best_similarity > EMBEDDING_SIMILARITY_THRESHOLD:
                                 recognized_segments.append({
@@ -1131,7 +1130,7 @@ def initialize_speaker_system(target_speaker_id: str = "merchant0") -> bool:
                                     'end_s': end,
                                     'audio': segment_audio
                                 })
-                                logger.info(f"[SPEECHBRAIN_PIPELINE] ✅ Recognized speaker: {best_match}")
+                                logger.info(f"[NOXTRAL] ✅ Recognized speaker: {best_match}")
                     
                     return recognized_segments
 
@@ -1160,10 +1159,7 @@ class LiveAudioFilter(FrameProcessor):
         self._filter_enabled = True
         self._audio_buffer = []
         self._min_samples = 1024 
-        self._frame_count = 0
-
-        
-        self.vad = webrtcvad.Vad(2)           
+        self._frame_count = 0         
         self.in_utterance = False
         self.utterance_buffer = bytearray()
         self.silence_duration_ms = 0
