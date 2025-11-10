@@ -69,7 +69,7 @@ noxtral/
    ```
 
 3.**create an audio dir**
-   in this format 
+   in this format and name it captured_audio
    ```
       dir
        |___audio1.wav
@@ -265,5 +265,6 @@ If you encounter any issues or have questions:
 
 
 **Made with ❤️ by [Cchunchunm4ru](https://github.com/Cchunchunm4ru)**
+
 
 
