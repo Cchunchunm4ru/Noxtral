@@ -68,11 +68,17 @@ noxtral/
    pip install sounddevice numpy faster-whisper nltk speechbrain torch librosa scipy scikit-learn webrtcvad soundfile
    ```
 
-3.**change the Path after recording speech instances**
-in speaker_isolation/speaker_system 
-change the path ```RECORDINGS_REF_PATH= your audio dir path```
+3.**create an audio dir**
+   in this format 
+   ```dir
+       |___audio1.wav
+       |___audio2.wav
+   ```
+4. **change the Path after recording speech instances**
+   in speaker_isolation/speaker_system 
+   change the path ```RECORDINGS_REF_PATH= your audio dir path```
 
-4.**Run the application**
+5. **Run the application**
    ```bash
    cd noxtral-CLI
    python simple_pipeline.py
@@ -258,3 +264,4 @@ If you encounter any issues or have questions:
 
 
 **Made with ❤️ by [Cchunchunm4ru](https://github.com/Cchunchunm4ru)**
+
