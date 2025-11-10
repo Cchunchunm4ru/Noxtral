@@ -55,7 +55,6 @@ except ImportError:
 import torch.nn as nn
 import torch.nn.functional as F
 import soundfile as sf
-import webrtcvad
 import requests  # if you use HTTP for Gemini
 from collections import defaultdict  # Add this missing import
 from F_def.capture import Frames, FrameCapture,AudioFrame,AudioRawFrame
