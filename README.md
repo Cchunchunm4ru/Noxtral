@@ -85,6 +85,12 @@ noxtral/
    python simple_pipeline.py
    ```
 
+**IF YOU ARE GETTING ANY ERROR REGARDING THE SPEECHBRAIN MODEL PLEASE DO THE BELOW **
+```
+pip install --upgrade speechbrain
+pip install --upgrade huggingface_hub transformers
+```
+
 ## 📋 Dependencies
 
 - **sounddevice**: Real-time audio I/O
@@ -265,6 +271,7 @@ If you encounter any issues or have questions:
 
 
 **Made with ❤️ by [Cchunchunm4ru](https://github.com/Cchunchunm4ru)**
+
 
 
 
